@@ -141,7 +141,7 @@ class NOCSMap(PointSet3D):
     def createNOCSFromNM(self, NOCSMap, RGB=None, Color=None):
         self.NOCSMap = NOCSMap
         # TODO: FIXME BUG: Removes all pixels with any channel 255 or 0
-        ValidIdx = np.where(np.all(NOCSMap != [255, 255, 255], axis=-1)) # Only white BG
+        ValidIdx = np.where(np.all(NOCSMap, axis=-1)) # Only white BG
         # ValidIdx = np.where(np.all(np.bitwise_and(NOCSMap != [255, 255, 255], NOCSMap != [0, 0, 0]), axis=-1)) # White and black BG
         self.ValidIdx = ValidIdx
         ValidPoints = NOCSMap[ValidIdx[0], ValidIdx[1]] / 255
