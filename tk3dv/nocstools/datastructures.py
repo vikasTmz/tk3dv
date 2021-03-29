@@ -122,10 +122,11 @@ class PointSet3D(PointSet):
         gl.glPopAttrib()
 
 class NOCSMap(PointSet3D):
-    def __init__(self, NOCSMap, RGB=None, Color=None):
+    def __init__(self, NOCSMap, RGB=None, Color=None, RemoveBackground=False):
         super().__init__()
         self.ValidIdx = None
         self.NOCSMap = None
+        self.RemoveBackground = RemoveBackground
         self.createNOCSFromNM(NOCSMap, RGB, Color)
         self.Size = NOCSMap.shape
         self.LineWidth = 3
@@ -141,8 +142,11 @@ class NOCSMap(PointSet3D):
     def createNOCSFromNM(self, NOCSMap, RGB=None, Color=None):
         self.NOCSMap = NOCSMap
         # TODO: FIXME BUG: Removes all pixels with any channel 255 or 0
-        ValidIdx = np.where(np.all(NOCSMap, axis=-1)) # Only white BG
-        # ValidIdx = np.where(np.all(np.bitwise_and(NOCSMap != [255, 255, 255], NOCSMap != [0, 0, 0]), axis=-1)) # White and black BG
+        if self.RemoveBackground:
+            ValidIdx = np.where(np.all(NOCSMap != [0,0,0], axis=-1)) # Only Black BG
+        else:
+            ValidIdx = np.where(np.all(NOCSMap, axis=-1)) # Only Black BG
+
         self.ValidIdx = ValidIdx
         ValidPoints = NOCSMap[ValidIdx[0], ValidIdx[1]] / 255
 
