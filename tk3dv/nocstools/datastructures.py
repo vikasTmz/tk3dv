@@ -143,11 +143,11 @@ class NOCSMap(PointSet3D):
         self.NOCSMap = NOCSMap
         # TODO: FIXME BUG: Removes all pixels with any channel 255 or 0
         if self.RemoveBackground:
-            print("removing background....")
-            ValidIdx = np.where(np.all(NOCSMap != [1,1,1], axis=-1)) # Only Black BG
+            print("Removing background....")
+            ValidIdx = np.where(np.all(NOCSMap != [0,0,0], axis=-1)) # Remove Black BG
         else:
-            print("retaining background....")
-            ValidIdx = np.where(np.all(NOCSMap, axis=-1)) # Only Black BG
+            print("Retaining background....")
+            ValidIdx = np.where(np.all(NOCSMap >= [0,0,0], axis=-1))
 
         self.ValidIdx = ValidIdx
         ValidPoints = NOCSMap[ValidIdx[0], ValidIdx[1]] / 255
